@@ -7,9 +7,20 @@ datasource db {
   provider = "postgresql"
 }
 
-model Item{
-  id                  Int         @id @default(autoincrement())
-  order               Int
-  name                String
-  description         String?
+model List {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  versions  Version[]
+}
+
+model Version {
+  id        Int      @id @default(autoincrement())
+  listId    Int
+  number    Int
+  content   Json // snapshot: [{ id, name, description, order }]
+  createdAt DateTime @default(now())
+
+  list List @relation(fields: [listId], references: [id])
+
+  @@unique([listId, number])
 }
