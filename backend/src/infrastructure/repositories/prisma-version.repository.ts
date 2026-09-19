@@ -26,7 +26,7 @@ export class PrismaVersionRepository implements VersionRepository {
     number: number;
     content: unknown;
     id: number;
-    restoredFromNumber?: number | null;
+    createdAt?: Date;
   }): Version {
     const items = (record.content as any[]).map((i) => new ListItem(i));
     return new Version(
@@ -34,7 +34,7 @@ export class PrismaVersionRepository implements VersionRepository {
       record.number,
       items,
       record.id,
-      record.restoredFromNumber ?? undefined,
+      record.createdAt,
     );
   }
 
@@ -64,6 +64,14 @@ export class PrismaVersionRepository implements VersionRepository {
     return record ? this.toDomain(record) : null;
   }
 
+  async deleteVersionsAfter(number: number): Promise<number> {
+    const listId = await this.getOrCreateListId();
+    const { count } = await this.prisma.version.deleteMany({
+      where: { listId, number: { gt: number } },
+    });
+    return count;
+  }
+
   async save(version: Version): Promise<Version> {
     const listId = await this.getOrCreateListId();
     const content = version.items.map((i) => ({
@@ -78,7 +86,6 @@ export class PrismaVersionRepository implements VersionRepository {
         listId,
         number: version.number,
         content,
-        restoredFromNumber: version.restoredFromNumber,
       },
     });
 

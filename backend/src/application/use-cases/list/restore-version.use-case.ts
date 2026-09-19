@@ -1,21 +1,20 @@
 import { Injectable } from '@nestjs/common';
-// import { VersionNotFoundError } from '../../domain/errors/version-not-found.error';
+import { VersionNotFoundError } from '../../../domain/errors/version-not-found.error.js';
 import { VersionRepository } from '../../../domain/repositories/item.repository.js';
+import { Version } from '../../../domain/entities/version.entity.js';
 
 @Injectable()
 export class RestoreVersionUseCase {
   constructor(private readonly versionRepository: VersionRepository) {}
 
-  async execute(versionNumber: number) {
+  async execute(versionNumber: number): Promise<Version> {
     const target = await this.versionRepository.findByNumber(versionNumber);
     if (!target) {
-      // throw new VersionNotFoundError(versionNumber);
-      throw Error();
+      throw new VersionNotFoundError(versionNumber);
     }
 
-    const current = await this.versionRepository.getCurrentVersion();
-    const restored = target.restoredAs(current.number + 1);
+    await this.versionRepository.deleteVersionsAfter(versionNumber);
 
-    return this.versionRepository.save(restored);
+    return target;
   }
 }

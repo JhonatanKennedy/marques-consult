@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import { ListItem } from './list-item.entity.js';
-// import { ItemNotFoundError } from '../errors/item-not-found.error';
+import { ItemNotFoundError } from '../errors/item-not-found.error.js';
 
 export class Version {
   constructor(
@@ -8,17 +8,11 @@ export class Version {
     readonly number: number,
     readonly items: ListItem[],
     readonly id?: number,
-    readonly restoredFromNumber?: number,
+    readonly createdAt?: Date,
   ) {}
 
-  private nextVersion(items: ListItem[], restoredFromNumber?: number): Version {
-    return new Version(
-      this.listId,
-      this.number + 1,
-      items,
-      undefined,
-      restoredFromNumber,
-    );
+  private nextVersion(items: ListItem[]): Version {
+    return new Version(this.listId, this.number + 1, items);
   }
 
   addItem(name: string, description?: string): Version {
@@ -59,19 +53,17 @@ export class Version {
     return this.nextVersion(reindexed);
   }
 
-  restoredAs(nextNumber: number): Version {
-    return new Version(
-      this.listId,
-      nextNumber,
-      this.items,
-      undefined,
-      this.number,
-    );
-  }
-
+  /**
+   * Every mutating operation on an item goes through here first.
+   *
+   * Without it the failure is silent and wrong rather than loud: `removeItem`
+   * and `editItem` would append a version identical to the current one, and
+   * `reorderItem` would look up a missing id as -1 and splice out the *last*
+   * item in the list instead of the one it was asked to move.
+   */
   private ensureItemExists(itemId: string): void {
-    // if (!this.items.some((i) => i.id === itemId)) {
-    //   throw new ItemNotFoundError(itemId);
-    // }
+    if (!this.items.some((item) => item.id === itemId)) {
+      throw new ItemNotFoundError(itemId);
+    }
   }
 }

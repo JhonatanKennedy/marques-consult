@@ -8,4 +8,9 @@ export abstract class VersionRepository {
     listId?: number,
   ): Promise<Version | null>;
   abstract save(version: Version): Promise<Version>;
+
+  abstract deleteVersionsAfter(
+    number: number,
+    listId?: number,
+  ): Promise<number>;
 }

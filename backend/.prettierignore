@@ -1,0 +1,25 @@
+# Prettier reads .prettierignore from the working directory, not by walking up,
+# so each package carries its own. The style itself is shared: ../.prettierrc.
+
+# Build output.
+dist
+coverage
+*.tsbuildinfo
+
+# Generated code. `prisma generate` writes this, so formatting it would be
+# undone the next time the client is generated.
+src/prisma/generated
+
+# No parser without a third-party plugin.
+src/prisma/migrations
+src/prisma/schema.prisma
+
+# npm owns the lockfile; `npm install` rewrites it wholesale.
+package-lock.json
+
+# Prose, not code.
+*.md
+
+# Assets.
+*.svg
+*.png
