@@ -1,0 +1,5 @@
+.drag-handle {
+  border-radius: var(--ds-radius);
+  box-shadow: 3px 3px 0 var(--ds-border);
+  touch-action: none;
+}

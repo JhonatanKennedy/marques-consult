@@ -1,7 +1,19 @@
-import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import { fileURLToPath } from 'node:url';
+import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from 'vite';
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
-})
+  plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
+  },
+  server: {
+    proxy: {
+      '/list': {
+        target: process.env.VITE_PROXY_TARGET ?? 'http://localhost:3000',
+        changeOrigin: true,
+      },
+    },
+  },
+});
