@@ -4,6 +4,7 @@
   "private": true,
   "description": "Root task runner. Delegates to the two packages; it exists so a single command at the root reaches both.",
   "scripts": {
+    "dev": "bash dev.sh",
     "test": "npm --prefix backend test && npm --prefix frontend test",
     "lint": "npm --prefix backend run lint && npm --prefix frontend run lint",
     "format": "npm --prefix backend run format && npm --prefix frontend run format",

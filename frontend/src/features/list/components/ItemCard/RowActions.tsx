@@ -3,7 +3,7 @@ import { ArrowDown, ArrowUp, Pencil, Trash2 } from 'lucide-react';
 
 export interface RowActionsProps {
   name: string;
-  pending: boolean;
+  isPending: boolean;
   moveUp: number | null;
   moveDown: number | null;
   onMove: (position: number) => void;
@@ -13,7 +13,7 @@ export interface RowActionsProps {
 
 export function RowActions({
   name,
-  pending,
+  isPending,
   moveUp,
   moveDown,
   onMove,
@@ -28,7 +28,7 @@ export function RowActions({
             <Button
               variant="ghost"
               size="sm"
-              disabled={pending}
+              disabled={isPending}
               onClick={() => onMove(moveUp)}
             >
               <ArrowUp size={16} strokeWidth={2.5} aria-hidden="true" />
@@ -41,7 +41,7 @@ export function RowActions({
             <Button
               variant="ghost"
               size="sm"
-              disabled={pending}
+              disabled={isPending}
               onClick={() => onMove(moveDown)}
             >
               <ArrowDown size={16} strokeWidth={2.5} aria-hidden="true" />
@@ -55,7 +55,7 @@ export function RowActions({
         <Button
           variant="ghost"
           size="sm"
-          disabled={pending}
+          disabled={isPending}
           onClick={onStartEdit}
         >
           <Pencil size={16} strokeWidth={2.5} aria-hidden="true" />
@@ -63,7 +63,12 @@ export function RowActions({
         </Button>
       </Tooltip>
       <Tooltip tip="Remover">
-        <Button variant="ghost" size="sm" disabled={pending} onClick={onRemove}>
+        <Button
+          variant="ghost"
+          size="sm"
+          disabled={isPending}
+          onClick={onRemove}
+        >
           <Trash2 size={16} strokeWidth={2.5} aria-hidden="true" />
           <span className="sr-only">Remover “{name}”</span>
         </Button>

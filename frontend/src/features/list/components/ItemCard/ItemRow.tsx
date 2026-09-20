@@ -1,17 +1,17 @@
 import { Card } from '@jhonatankennedy/ui-react';
 import type { ListItem } from '@/domain/list';
-import { DragHandle } from '@/features/list/components/DragHandle';
+import { DragHandle } from '@/features/list/components/DragHandle/DragHandle';
 import type { HandleProps } from '@/features/list/components/SortableItem';
 import { RowActions } from './RowActions';
 
 export interface ItemRowProps {
   item: ListItem;
   position: number;
-  pending: boolean;
+  isPending: boolean;
   moveUp: number | null;
   moveDown: number | null;
   handleProps: HandleProps | null;
-  dragging: boolean;
+  isDragging: boolean;
   onMove: (position: number) => void;
   onStartEdit: () => void;
   onRequestRemove: () => void;
@@ -20,19 +20,19 @@ export interface ItemRowProps {
 export function ItemRow({
   item,
   position,
-  pending,
+  isPending,
   moveUp,
   moveDown,
   handleProps,
-  dragging,
+  isDragging,
   onMove,
   onStartEdit,
   onRequestRemove,
 }: ItemRowProps) {
   return (
-    <Card className={`row ${dragging ? 'opacity-0' : ''}`}>
+    <Card className={`row ${isDragging ? 'opacity-0' : ''}`}>
       <div
-        className={`flex flex-wrap items-start gap-x-3 gap-y-2 transition-opacity ${pending ? 'opacity-50' : ''}`}
+        className={`flex flex-wrap items-start gap-x-3 gap-y-2 transition-opacity ${isPending ? 'opacity-50' : ''}`}
       >
         {handleProps && (
           <DragHandle
@@ -64,7 +64,7 @@ export function ItemRow({
         {handleProps && (
           <RowActions
             name={item.name}
-            pending={pending}
+            isPending={isPending}
             moveUp={moveUp}
             moveDown={moveDown}
             onMove={onMove}

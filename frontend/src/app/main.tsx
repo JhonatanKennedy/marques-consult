@@ -4,7 +4,8 @@ import { createRoot } from 'react-dom/client';
 
 import '@jhonatankennedy/ui-react/styles.css';
 import '../index.css';
-import { createQueryClient } from '@/infrastructure/query-client';
+import { createQueryClient } from '@/infrastructure/queryClient';
+import { ErrorBoundary } from './ErrorBoundary';
 import { ListPage } from './ListPage';
 
 const rootElement = document.getElementById('root');
@@ -17,7 +18,9 @@ const queryClient = createQueryClient();
 createRoot(rootElement).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ListPage />
+      <ErrorBoundary>
+        <ListPage />
+      </ErrorBoundary>
     </QueryClientProvider>
   </StrictMode>,
 );
