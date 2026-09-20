@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# Per-machine Claude Code overrides. `.claude/settings.json` and `.claude/hooks/`
+# are shared and committed; this one holds local permissions and is not.
+# (`*.local` above does not cover it — that pattern matches names *ending* in
+# `.local`, and this one ends in `.json`.)
+.claude/settings.local.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
